@@ -1,4 +1,12 @@
-Postman Json Link for testing
->> https://www.getpostman.com/collections/1d9c835ac09932ccd8f0
-
+Main Branch is for testing locally.
 I also uploaded here json files of environment and collection from postman.
+
+Serverless Branch is for developing branch using aws lambda service.
+endpoints:
+  POST - https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/createcreator  
+  POST - https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/createpost     
+  POST - https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/createpost2    
+  POST - https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/createcomment  
+  GET - https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/getallpost      
+  DELETE - https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/deletecreator
+
