@@ -1,7 +1,14 @@
-Main Branch is for testing locally.
+- Main Branch is for testing locally.
 I also uploaded here json files of environment and collection from postman.
+endpoints
+POST - https://localhost:4000/createcreator  
+POST - https://localhost:4000/createpost2    
+POST - https://localhost:4000/createcomment  
+GET - https://localhost:4000/getallpost      
+DELETE - https://localhost:4000/deletecreator
 
-Serverless Branch is for developing branch using aws lambda service.
+
+- Serverless Branch is for developing branch using aws lambda service.
 endpoints:
   POST - https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/createcreator  
   POST - https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/createpost2    
