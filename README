@@ -4,7 +4,6 @@ I also uploaded here json files of environment and collection from postman.
 Serverless Branch is for developing branch using aws lambda service.
 endpoints:
   POST - https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/createcreator  
-  POST - https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/createpost     
   POST - https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/createpost2    
   POST - https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/createcomment  
   GET - https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/getallpost      
