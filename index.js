@@ -217,12 +217,19 @@ app.delete('/deletecreator',function(req,res){
     creator : req.headers['x-account-id']
   }
   if(dataobj.creator){
-    imagegramModel.deletecreator2(dataobj,function(err,result){
+    imagegramModel.deletecreator_Serverless(dataobj,function(err,result){
       if(err){
         res.setHeader('x-account-id',dataobj.creator);
         res.send(err);
       }else{
-        res.status(201).send(result);
+        const objects_to_delete = result.ilist;
+        s3.deleteObject(objects_to_delete, function(err, data) {
+          if (err){
+            res.send(err);
+          }else{
+            res.status(201).send(result);
+          }
+        });
       }
     });
   }else{

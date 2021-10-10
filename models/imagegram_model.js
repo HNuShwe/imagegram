@@ -175,14 +175,14 @@ exports.deletecreator = function(dataobj,callback){
         }
     });
 }
-exports.deletecreator2 = function(dataobj,callback){
+exports.deletecreator_Serverless = function(dataobj,callback){
     
     mysql.getConnection(function(err, connection){
         if(err){
             const response = {creatorId: dataobj.creator, data: null, message: err };
             callback(response);
         }else{
-            const dquery = "DELETE  accounts,posts,comments FROM accounts INNER JOIN posts ON accounts.id = posts.creator INNER JOIN comments ON FIND_IN_SET(comments.id,posts.comments) WHERE accounts.id = ? ";
+            const dquery = "SELECT GROUP_CONCAT(posts.images SEPARATOR ',') as ilist FROM posts LEFT JOIN accounts ON accounts.id = posts.creator WHERE accounts.id = ?;DELETE  accounts,posts,comments FROM accounts INNER JOIN posts ON accounts.id = posts.creator INNER JOIN comments ON FIND_IN_SET(comments.id,posts.comments) WHERE accounts.id = ? ";
             var i = connection.query(dquery,dataobj.creator, (err, results, fields) => {
             if (err) {
                 const response = {creatorId: dataobj.creator, data: null, message: err };
@@ -190,7 +190,8 @@ exports.deletecreator2 = function(dataobj,callback){
             }else{
                 const response = {
                     data: null,
-                    message: 'Account was deleted successfully'
+                    message: 'Account was deleted successfully',
+                    ilist: results[0].ilist
                     };
                     callback(null,response);
             }console.log(i.sql);
