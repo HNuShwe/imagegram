@@ -1,33 +1,36 @@
 # serverless.yml
 service: imagegram
+package:
+  individually: true
 
 provider:
   name: aws
-  runtime: nodejs14.18.0
-  stage: dev
-  profile: default
+  runtime: nodejs10.x
+  memorySize: 128
+  timeout: 10
+  stage: production
   region: us-east-1
-  memorySize: 512
 
 functions:
   app:
     handler: index.handler
     events:
       - http:
-          path: account
-          method: get
-      - http:
-          path: account/{id}
-          method: get
-      - http:
-          path: createaccount
+          path: createcreator
           method: post
       - http:
-          path: account/{id}
-          method: put
+          path: createpost
+          method: post
       - http:
-          path: account/{id}
+          path: createcomment
+          method: post
+      - http:
+          path: getallpost
+          method: get
+      - http:
+          path: deletecreator
           method: delete
 
 plugins:
   - serverless-offline
+  

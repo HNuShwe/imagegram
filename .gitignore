@@ -1,0 +1,11 @@
+# Dependency directories
+node_modules
+
+.npm
+
+# Serverless
+.webpack
+.serverless
+
+# env
+.env

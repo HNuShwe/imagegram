@@ -4,20 +4,24 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js",
-    "dev": "serverless offline"
+    "test": "serverless offline",
+    "deploy": "serverless deploy"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-xray-sdk": "^3.3.3",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "multer": "^1.4.3",
     "mysql": "^2.18.1",
-    "serverless-http": "^2.7.0",
+    "sequelize-cursor-pagination": "^2.3.0",
+    "serverless-bundle": "^5.0.2",
+    "serverless-dotenv-plugin": "^3.10.0",
+    "serverless-http": "^2.0.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
