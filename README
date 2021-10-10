@@ -1,5 +1,6 @@
+I have attached json files of environment and collection from postman. 
+
 - Main Branch is for testing locally.
-I also uploaded here json files of environment and collection from postman.
 endpoints
 POST - https://localhost:4000/createcreator  
 POST - https://localhost:4000/createpost2    
