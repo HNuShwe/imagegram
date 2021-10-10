@@ -3,6 +3,22 @@ service: imagegram
 package:
   individually: true
 
+custom:
+  cors:
+    origin: '*'
+    headers:
+      - Cache-Control
+      - Content-Type
+      - Authorization
+      - Accept
+      - Accept-Encoding
+      - X-Amz-Date
+      - X-Api-Key
+      - X-Amz-Security-Token
+      - X-Amz-User-Agent
+      - x-account-id
+    allowCredentials: false
+
 provider:
   name: aws
   runtime: nodejs10.x
@@ -22,7 +38,10 @@ functions:
           path: createpost
           method: post
       - http:
-          path: createcomment
+          path: createpost2
+          method: post
+      - http:
+          path: addcomment
           method: post
       - http:
           path: getallpost

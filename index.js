@@ -7,25 +7,26 @@ const fs = require('fs');
 const multer  = require('multer');
 const app = express();
 const port = process.env.PORT || 4000;
+const AWS = require('aws-sdk');
+const BUCKET_NAME = process.env.s3bucket;
+const IAM_USER_KEY = process.env.accessKeyId;
+const IAM_USER_SECRET = process.env.secretAccessKey;
+const s3 = new AWS.S3({
+  accessKeyId: IAM_USER_KEY,
+  secretAccessKey: IAM_USER_SECRET
+});
 
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    let dir =  __dirname + '/public/uploads/'+ req['x-account-id'];
-    if(!fs.existsSync(dir)){
-        fs.mkdirSync(dir);
-    }
-    cb(null,dir);
-  },
   filename: function (req, file, cb) {
     cb(null, file.fieldname + '-' + Date.now() + '.jpg');
   }
 });
 
 var upload = multer({
-    storage: storage,
+    /*storage: storage,*/
     fileFilter: function (req, file, callback) {
       var ext = path.extname(file.originalname);
       if(ext !== '.png' && ext !== '.jpg' && ext !== '.png' && ext !== '.bmp') {
@@ -45,13 +46,88 @@ app.post('/createcreator',upload, (req, res) => {
       if(err){
           res.send(err);
       }else{
+        res.setHeader('x-account-id',result.creatorId);
         res.status(201).send(result);
       }
     });
 });
 
+app.post('/createpost2',function(req,res){
+  const dataobj = {
+    creator : req.headers['x-account-id'],
+    caption : req.body.caption,
+  }
+  if(dataobj.creator){
+    upload(req,res,function(err){
+      if(err)
+      {
+        console.log(err);
+        const response = {creatorId: dataobj.creator, data: null, message: err};
+        res.setHeader('x-account-id',dataobj.creator);
+        res.send(response);
+      }
+      else
+      {
+        const reqBody = {
+          caption : req.body.caption,
+          images   : req.files.map(a => a.filename).join(','),
+          creator : dataobj.creator
+        };        
+        
+        const images_arr = [];
+        var fs = require('fs');
+        const async = require('async');
+        async.each(req.files, function(eachfile,asCb)
+        {
+          // Read the file
+          const file = fs.readFileSync(eachfile);
+              // Setting up S3 upload parameters
+              const uploadParams = {
+                Bucket: BUCKET_NAME, // Bucket into which you want to upload file
+                Key: newfilename, // Name by which you want to save it
+                Body: file // Local file 
+            };
+            s3.upload(uploadParams, function(err, data) {
+                if (err) { 
+                  asCb(err);
+                } 
+                if (data) {
+                  images_arr.push(newfilename);
+                  asCb();
+                }
+            });
+        },function(err)
+        {
+          if(err)
+          {
+            console.log(err);
+            const response = {creatorId: dataobj.creator, data: null, message: err};
+            res.setHeader('x-account-id',dataobj.creator);
+            res.send(response);
+          }else{
+            console.log("Images were uploaded");
+            imagegramModel.createpost(reqBody,function(err,result){
+              if(err){
+                  res.setHeader('x-account-id',dataobj.creator);
+                  res.send(err);
+              }else{
+                res.setHeader('x-account-id',dataobj.creator);
+                res.status(201).send(result);
+              }
+            });    
+          }    
+        });
+      }
+    });
+  }else{
+    const response = {creatorId: null, data: null, message: "Creator cannot be null." };
+    res.send(response);
+  }
+});
+
 //User Stories 2: As a user, I should be able to create posts with images
 app.post('/createpost', function(req, res){
+  console.log(req.headers);
   const dataobj = {
     creator : req.headers['x-account-id']
   }
@@ -60,7 +136,8 @@ app.post('/createpost', function(req, res){
         if(err)
         {
           console.log(err);
-          const response = {creatorId: data.creator, data: null, message: err};
+          const response = {creatorId: dataobj.creator, data: null, message: err};
+          res.setHeader('x-account-id',dataobj.creator);
           res.send(response);
         }
         else
@@ -73,8 +150,10 @@ app.post('/createpost', function(req, res){
           };        
           imagegramModel.createpost(reqBody,function(err,result){
             if(err){
+                res.setHeader('x-account-id',dataobj.creator);
                 res.send(err);
             }else{
+              res.setHeader('x-account-id',dataobj.creator);
               res.status(201).send(result);
             }
           });
@@ -96,8 +175,10 @@ app.post('/addcomment',upload, (req, res) => {
   if(dataobj.creator){
     imagegramModel.addcomment(dataobj,function(err,result){
       if(err){
+        res.setHeader('x-account-id',dataobj.creator);
         res.send(err);
       }else{
+        res.setHeader('x-account-id',dataobj.creator);
         res.status(201).send(result);
       }
     });
@@ -117,8 +198,10 @@ app.get('/getallpost',function(req,res){
   if(dataobj.creator){
     imagegramModel.getallpost(dataobj,function(err,result){
       if(err){
+          res.setHeader('x-account-id',dataobj.creator);
           res.send(err);
       }else{
+        res.setHeader('x-account-id',dataobj.creator);
         res.status(201).send(result);
       }
     });
@@ -134,8 +217,9 @@ app.delete('/deletecreator',function(req,res){
     creator : req.headers['x-account-id']
   }
   if(dataobj.creator){
-    imagegramModel.deletecreator(dataobj,function(err,result){
+    imagegramModel.deletecreator2(dataobj,function(err,result){
       if(err){
+        res.setHeader('x-account-id',dataobj.creator);
         res.send(err);
       }else{
         res.status(201).send(result);
@@ -154,8 +238,8 @@ app.all('*', function(req, res) {
 });
 
 // wrap express app instance with serverless http function
-//export const handler = serverless(app);
+exports.handler = serverless(app);
 
-app.listen(port, function() {
+/* app.listen(port, function() {
   console.log('Imagegram is listening on port ' + port);
-});
+}); */
