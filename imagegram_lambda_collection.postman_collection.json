@@ -1,0 +1,204 @@
+{
+	"info": {
+		"_postman_id": "6d1e5533-0b1c-4b6d-b876-c969e5c3684d",
+		"name": "imagegram_lambda_collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Creator",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Hnin NU Shwe",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/createcreator",
+					"protocol": "https",
+					"host": [
+						"d6hu14mpzi",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"production",
+						"createcreator"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "caption",
+							"value": "Layer",
+							"type": "text"
+						},
+						{
+							"key": "images",
+							"type": "file",
+							"src": "ZI2PPENDB/1.png"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/createpost2",
+					"protocol": "https",
+					"host": [
+						"d6hu14mpzi",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"production",
+						"createpost2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Comment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "post_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "Here is cotent section",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/addcomment",
+					"protocol": "https",
+					"host": [
+						"d6hu14mpzi",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"production",
+						"addcomment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Posts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/getallpost",
+					"protocol": "https",
+					"host": [
+						"d6hu14mpzi",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"production",
+						"getallpost"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Creator",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/deletecreator",
+					"protocol": "https",
+					"host": [
+						"d6hu14mpzi",
+						"execute-api",
+						"us-east-1",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"production",
+						"deletecreator"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{x-account-id}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "x-account-id",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"",
+					"pm.test(\"Check response\", function () {",
+					"    var jsonData = pm.response.json();",
+					"    console.log(jsonData.creatorId);",
+					"    pm.environment.set(\"x-account-id\", jsonData.creatorId);",
+					"});"
+				]
+			}
+		}
+	]
+}
