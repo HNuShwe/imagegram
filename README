@@ -18,6 +18,3 @@ endpoints:
   GET - https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/getallpost      
   DELETE - https://d6hu14mpzi.execute-api.us-east-1.amazonaws.com/production/deletecreator
   
-  
-  Thank You For Your Time and Consideration...
-
