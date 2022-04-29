@@ -1,6 +1,3 @@
-I have attached json files of environment and collection from postmam for both localhost and aws lambda service.
-
-- Main Branch is for testing locally.
 
 endpoints
 POST - https://localhost:4000/createcreator  
